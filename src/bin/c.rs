@@ -1,33 +1,33 @@
 #[allow(unused_imports)]
-use proconio::marker::{Bytes, Chars};
+use proconio::marker::{Bytes, Chars, Usize1};
 use proconio::{fastout, input};
 #[fastout]
 fn main() {
     input! {
         n: usize,
         m: usize,
-        s: [(usize, usize); m]
+        s: [(Usize1, char); m]
     }
-    let mut ans = -1;
-    let mut c: Vec<usize> = vec![10; n];
-    for i in s.iter() {
-        if c[n - i.0] == 10 || c[n - i.0] == i.1 {
-            c[n - i.0] = i.1;
-        } else if c[n - i.0] != i.1 {
+    let mut ans = vec!['_'; n];
+    for &(s, c) in s.iter() {
+        if ans[s] != '_' && ans[s] != c {
             println!("-1");
             return;
         }
+        ans[s] = c;
     }
-    if c[0] == 0 {
+    if ans[0] == '0' && n != 1 {
         println!("-1");
         return;
     }
-    let mut tmp = 0;
-    for j in 0..n {
-        if c[j] == 10 {
-            continue;
-        }
-        tmp += c[j] * 10 ^ (n - j);
+    if ans[0] == '_' && n != 1 {
+        ans[0] = '1';
     }
-    println!("{:?}", tmp);
+    for &c in ans.iter() {
+        if c == '_' {
+            print!("0");
+        } else {
+            print!("{}", c);
+        }
+    }
 }
